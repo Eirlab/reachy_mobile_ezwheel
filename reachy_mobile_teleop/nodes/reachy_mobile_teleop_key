@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+"""
+This file is part of Reachy Mobile project allowing to control with keyboard the mobile base.
+"""
+
+import os
+import select
+import sys
+
+import rospy
+from geometry_msgs.msg import Twist
+
+if os.name == 'nt':
+    import msvcrt
+else:
+    import tty
+    import termios
+
+REACHY_MAX_LIN_VEL = 0.22
+REACHY_MAX_ANG_VEL = 2.84
+
+LIN_VEL_STEP_SIZE = 0.01
+ANG_VEL_STEP_SIZE = 0.1
+
+msg = """
+Control Your Reachy Mobile!
+---------------------------
+Moving around:
+        w
+   a    s    d
+        x
+
+w/x : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
+a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
+
+space key, s : force stop
+
+CTRL-C to quit
+"""
+
+e = """
+Communications Failed
+"""
+
+
+def get_key():
+    """
+    Get single key_pressed press from user
+    :return: key_pressed pressed
+    """
+    if os.name == 'nt':
+        if sys.version_info[0] >= 3:
+            return msvcrt.getch().decode()
+        else:
+            return msvcrt.getch()
+
+    tty.setraw(sys.stdin.fileno())
+    rlist, _, _ = select.select([sys.stdin], [], [], 0.1)
+    if rlist:
+        key_pressed = sys.stdin.read(1)
+    else:
+        key_pressed = ''
+
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    return key_pressed
+
+
+def vels(target_linear_vel, target_angular_vel):
+    """
+    Display the target linear and angular velocity
+    :param target_linear_vel: target linear velocity
+    :param target_angular_vel: target angular velocity
+    :return: a string with the target linear and angular velocity
+    """
+    return "currently:\tlinear vel %s\t angular vel %s " % (target_linear_vel, target_angular_vel)
+
+
+def make_simple_profile(output, input, slop):
+    """
+    Generate a simple velocity profile for the output
+    :return: output
+    """
+    if input > output:
+        output = min(input, output + slop)
+    elif input < output:
+        output = max(input, output - slop)
+    else:
+        output = input
+
+    return output
+
+
+def constrain(input, low, high):
+    """
+    Constrain a given number between a minimum and maximum value
+    :param input: the number to constrain
+    :param low: the lower bound
+    :param high: the upper bound
+    :return: input if it is between low and high, otherwise the closest bound
+    """
+    if input < low:
+        input = low
+    elif input > high:
+        input = high
+    else:
+        input = input
+
+    return input
+
+
+def check_linear_limit_velocity(vel):
+    """
+    Check the linear velocity limit
+    :param vel: the linear velocity
+    :return: constrained linear velocity
+    """
+    vel = constrain(vel, -REACHY_MAX_LIN_VEL, REACHY_MAX_LIN_VEL)
+    return vel
+
+
+def check_angular_limit_velocity(vel):
+    """
+    Check the angular velocity limit
+    :param vel: the angular velocity
+    :return: constrained angular velocity
+    """
+    vel = constrain(vel, -REACHY_MAX_ANG_VEL, REACHY_MAX_ANG_VEL)
+    return vel
+
+
+if __name__ == "__main__":
+    if os.name != 'nt':
+        settings = termios.tcgetattr(sys.stdin)
+
+    rospy.init_node('reachy_mobile_teleop')
+    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+
+    status = 0
+    target_linear_vel = 0.0
+    target_angular_vel = 0.0
+    control_linear_vel = 0.0
+    control_angular_vel = 0.0
+
+    try:
+        print(msg)
+        while (1):
+            key = get_key()
+            if key == 'w':
+                target_linear_vel = check_linear_limit_velocity(target_linear_vel + LIN_VEL_STEP_SIZE)
+                status += 1
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'x':
+                target_linear_vel = check_linear_limit_velocity(target_linear_vel - LIN_VEL_STEP_SIZE)
+                status += 1
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'a':
+                target_angular_vel = check_angular_limit_velocity(target_angular_vel + ANG_VEL_STEP_SIZE)
+                status += 1
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == 'd':
+                target_angular_vel = check_angular_limit_velocity(target_angular_vel - ANG_VEL_STEP_SIZE)
+                status += 1
+                print(vels(target_linear_vel, target_angular_vel))
+            elif key == ' ' or key == 's':
+                target_linear_vel = 0.0
+                control_linear_vel = 0.0
+                target_angular_vel = 0.0
+                control_angular_vel = 0.0
+                print(vels(target_linear_vel, target_angular_vel))
+            else:
+                if key == '\x03':
+                    break
+
+            if status == 20:
+                print(msg)
+                status = 0
+
+            twist = Twist()
+
+            control_linear_vel = make_simple_profile(control_linear_vel, target_linear_vel, (LIN_VEL_STEP_SIZE / 2.0))
+            twist.linear.x = control_linear_vel
+            twist.linear.y = 0.0
+            twist.linear.z = 0.0
+
+            control_angular_vel = make_simple_profile(control_angular_vel, target_angular_vel,
+                                                      (ANG_VEL_STEP_SIZE / 2.0))
+            twist.angular.x = 0.0
+            twist.angular.y = 0.0
+            twist.angular.z = control_angular_vel
+
+            pub.publish(twist)
+
+    except:
+        print(e)
+
+    finally:
+        twist = Twist()
+        twist.linear.x = 0.0
+        twist.linear.y = 0.0
+        twist.linear.z = 0.0
+        twist.angular.x = 0.0
+        twist.angular.y = 0.0
+        twist.angular.z = 0.0
+        pub.publish(twist)
+
+    if os.name != 'nt':
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
