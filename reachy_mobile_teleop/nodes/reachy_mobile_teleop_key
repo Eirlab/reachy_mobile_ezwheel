@@ -30,8 +30,8 @@ Moving around:
    a    s    d
         x
 
-w/x : increase/decrease linear velocity (Burger : ~ 0.22, Waffle and Waffle Pi : ~ 0.26)
-a/d : increase/decrease angular velocity (Burger : ~ 2.84, Waffle and Waffle Pi : ~ 1.82)
+w/x : increase/decrease linear velocity
+a/d : increase/decrease angular velocity
 
 space key, s : force stop
 
@@ -143,7 +143,7 @@ if __name__ == "__main__":
 
     try:
         print(msg)
-        while (1):
+        while 1:
             key = get_key()
             if key == 'w':
                 target_linear_vel = check_linear_limit_velocity(target_linear_vel + LIN_VEL_STEP_SIZE)
