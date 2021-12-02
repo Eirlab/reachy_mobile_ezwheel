@@ -16,10 +16,10 @@ else:
     import tty
     import termios
 
-REACHY_MAX_LIN_VEL = 0.22
+REACHY_MAX_LIN_VEL = 2
 REACHY_MAX_ANG_VEL = 2.84
 
-LIN_VEL_STEP_SIZE = 0.01
+LIN_VEL_STEP_SIZE = 0.1
 ANG_VEL_STEP_SIZE = 0.1
 
 msg = """
@@ -133,7 +133,7 @@ if __name__ == "__main__":
         settings = termios.tcgetattr(sys.stdin)
 
     rospy.init_node('reachy_mobile_teleop')
-    pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+    pub = rospy.Publisher('joy_cmd_vel', Twist, queue_size=10)
 
     status = 0
     target_linear_vel = 0.0
