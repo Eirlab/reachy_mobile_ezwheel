@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+  <arg name="model" />
+
+  <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/swd_starter_kit.urdf" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</launch>
