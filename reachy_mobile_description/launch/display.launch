@@ -2,11 +2,7 @@
 <launch>
     <arg name="model"/>
 
-    <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/swd_starter_kit.urdf"/>
-    <node name="tf_footprint_base" pkg="tf"
-          type="static_transform_publisher"
-          args="0 0 0 0 0 0 base_link base_footprint 40"/>
-
+    <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/reachy_mobile.urdf"/>
     <node name="tf_footprint_base" pkg="tf"
           type="static_transform_publisher"
           args="0 0 0 0 0 0 base_link base_footprint 40"/>

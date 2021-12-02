@@ -7,7 +7,7 @@
         args="0 0 0 0 0 0 base_link base_footprint 40" />
 
   <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
-        args="-file $(find swd_starter_kit_description)/urdf/swd_starter_kit.urdf -urdf -model swd_starter_kit"
+        args="-file $(find reachy_mobile_description)/urdf/reachy_mobile.urdf -urdf -model reachy_mobile"
         output="screen" />
 
   <node name="fake_joint_calibration" pkg="rostopic"
