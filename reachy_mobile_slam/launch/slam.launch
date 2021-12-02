@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Arguments -->
+    <arg name="open_rviz" default="true"/>
+    <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+    <include file="$(find reachy_mobile_description)/launch/display.launch">
+    </include>
+
+    <!-- rviz -->
+    <group if="$(arg open_rviz)">
+        <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find reachy_mobile_slam)/rviz/slam.rviz"/>
+    </group>
+</launch>
