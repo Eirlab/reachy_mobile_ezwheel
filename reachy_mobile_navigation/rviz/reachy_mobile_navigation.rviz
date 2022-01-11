@@ -22,6 +22,7 @@ Panels:
     Expanded:
       - /2D Pose Estimate1
       - /2D Nav Goal1
+      - /Publish Point1
     Name: Tool Properties
     Splitter Ratio: 0.5886790156364441
   - Class: rviz/Views
@@ -319,11 +320,14 @@ Visualization Manager:
     - Class: rviz/SetGoal
       Topic: /move_base_simple/goal
     - Class: rviz/Measure
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
   Value: true
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 4.383827209472656
+      Distance: 5.4946370124816895
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -331,9 +335,9 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 5.499712944030762
-        Y: 5.860983848571777
-        Z: -4.5299530029296875e-06
+        X: 7.7737650871276855
+        Y: 8.778511047363281
+        Z: -4.0531158447265625e-06
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
