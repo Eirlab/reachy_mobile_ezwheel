@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import os
 
 os.system("rosnode kill teleop_twist_joy")
