@@ -6,6 +6,9 @@
 
     <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/swd_starter_kit.urdf"/>
 
+<!--    <node pkg="reachy_mobile_navigation" name="kill" type="kill.py" output="screen"/>-->
+    <node pkg="reachy_mobile_navigation" name="app" type="app.py" output="screen"/>
+
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
     <!-- Map server -->
