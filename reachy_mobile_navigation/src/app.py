@@ -94,7 +94,7 @@ class API:
         if request.method == 'GET':
             global move_base
             arrived = move_base.is_arrived()
-            return arrived
+            return str(arrived)
 
 
 if __name__ == '__main__':
