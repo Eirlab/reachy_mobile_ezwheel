@@ -8,7 +8,7 @@
 
 <!--    <node pkg="reachy_mobile_navigation" name="kill" type="kill.py" output="screen"/>-->
     <node pkg="reachy_mobile_navigation" name="app" type="app.py" output="screen"/>
-
+<
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
     <!-- Map server -->
