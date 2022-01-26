@@ -2,13 +2,15 @@
     <!-- Arguments -->
     <arg name="map_file" default="$(find reachy_mobile_navigation)/maps/map.yaml"/>
     <arg name="open_rviz" default="true"/>
+    <arg name="open_api" default="false"/>
     <arg name="move_forward_only" default="true"/>
 
     <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/swd_starter_kit.urdf"/>
 
 <!--    <node pkg="reachy_mobile_navigation" name="kill" type="kill.py" output="screen"/>-->
-    <node pkg="reachy_mobile_navigation" name="app" type="app.py" output="screen"/>
-<
+    <group if="$(arg open_api)">
+        <node pkg="reachy_mobile_navigation" name="app" type="app.py" output="screen"/>
+    </group>
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
     <!-- Map server -->
