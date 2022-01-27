@@ -47,17 +47,11 @@ TebLocalPlannerROS:
  acc_lim_x: 0.5
  acc_lim_theta: 0.5
  min_turning_radius: 0.0
+ allow_init_with_backwards_motion: false
  footprint_model: # types: "point", "circular", "two_circles", "line", "polygon"
    type: "polygon"
-   radius: 0.2 # for type "circular"
-   line_start: [-0.3, 0.0] # for type "line"
-   line_end: [0.3, 0.0] # for type "line"
-   front_offset: 0.2 # for type "two_circles"
-   front_radius: 0.2 # for type "two_circles"
-   rear_offset: 0.2 # for type "two_circles"
-   rear_radius: 0.2 # for type "two_circles"
    vertices: [[0.12, 0.267], [0.12, -0.267], [-0.415, -0.2], [-0.415, 0.2]] # for type "polygon"
-
+   
  # GoalTolerance
 
  xy_goal_tolerance: 0.4
@@ -66,13 +60,13 @@ TebLocalPlannerROS:
 
  # Obstacles
 
- min_obstacle_dist: 0.1
+ min_obstacle_dist: 0.15
  include_costmap_obstacles: True
- costmap_obstacles_behind_robot_dist: 0.1
+ costmap_obstacles_behind_robot_dist: 1.0
  obstacle_poses_affected: 20
  costmap_converter_plugin: ""
  costmap_converter_spin_thread: True
- costmap_converter_rate: 5
+ costmap_converter_rate: 10
 
  # Optimization
 
@@ -82,14 +76,14 @@ TebLocalPlannerROS:
  optimization_verbose: False
  penalty_epsilon: 0.1
  weight_max_vel_x: 2
- weight_max_vel_theta: 0.5
+ weight_max_vel_theta: 1
  weight_acc_lim_x: 1
  weight_acc_lim_theta: 1
  weight_kinematics_nh: 1000
  weight_kinematics_forward_drive: 10000
- weight_kinematics_turning_radius: 1
+ weight_kinematics_turning_radius: 100
  weight_optimaltime: 10
- weight_obstacle: 15
+ weight_obstacle: 50
  weight_dynamic_obstacle: 15 # not in use yet
  selection_alternative_time_cost: False
 
@@ -98,7 +92,7 @@ TebLocalPlannerROS:
  enable_homotopy_class_planning: False
  enable_multithreading: True
  simple_exploration: True
- max_number_classes: 4
+ max_number_classes: 3
  roadmap_graph_no_samples: 15
  roadmap_graph_area_width: 5
  h_signature_prescaler: 0.5

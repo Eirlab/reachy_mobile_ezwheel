@@ -1,4 +1,4 @@
-image: /home/terarys/Documents/Reachy_Mobile/reachy_ws/src/reachy_mobile_ezwheel/reachy_mobile_navigation/maps/map.pgm
+image: /home/swd_sk/reachy_ws/src/reachy_mobile_ezwheel/reachy_mobile_navigation/maps/map.pgm
 resolution: 0.050000
 origin: [-51.224998, -51.224998, 0.000000]
 negate: 0
