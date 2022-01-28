@@ -70,8 +70,8 @@ class API:
     def __init__(self):
         self.bp = Blueprint('api', __name__)
         self.bp.route('/goal', methods=['POST'])(self.goal)
-        self.bp.route('/cancel', methods=['GET'])(self.cancel)
-        self.bp.route('/arrived', methods=['GET'])(self.arrived)
+        self.bp.route('/cancel', methods=['POST'])(self.cancel)
+        self.bp.route('/status', methods=['GET'])(self.status)
 
     def goal(self):
         if request.method == 'POST':
@@ -82,6 +82,7 @@ class API:
             y = data['y']
             theta = data['theta']
             move_base.go_to(x, y, theta, blocking=False)
+
             return "Go to {} {} {}".format(x, y, theta)
 
     def cancel(self):
@@ -90,7 +91,7 @@ class API:
             move_base.cancel_all_goals()
             return 'cancelling'
 
-    def arrived(self):
+    def status(self):
         if request.method == 'GET':
             global move_base
             arrived = move_base.is_arrived()

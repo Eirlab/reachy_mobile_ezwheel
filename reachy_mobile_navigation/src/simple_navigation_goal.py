@@ -161,10 +161,20 @@ class SimpleNavigationGoals:
         Returns False otherwise (PENDING or ACTIVE)
         """
         state = self.move_base.get_state()
-        rospy.loginfo("State = {}".format(state))
         if state == GoalStatus.PENDING or state == GoalStatus.ACTIVE:
-            return False
-        return True
+            return "Running"
+        elif state == GoalStatus.RECALLED or state == GoalStatus.REJECTED:
+            return "Rejected"
+        elif state == GoalStatus.PREEMPTED:
+            return "Preempted"
+        elif state == GoalStatus.ABORTED:
+            return "Aborted"
+        elif state == GoalStatus.SUCCEEDED:
+            return "Succeeded"
+        elif state == GoalStatus.LOST:
+            return "Lost"
+        return "Undefined"
+
 
     # uint8 PENDING         = 0   # The goal has yet to be processed by the action server
     # uint8 ACTIVE          = 1   # The goal is currently being processed by the action server
