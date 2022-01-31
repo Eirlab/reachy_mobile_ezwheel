@@ -175,7 +175,6 @@ class SimpleNavigationGoals:
             return "Lost"
         return "Undefined"
 
-
     # uint8 PENDING         = 0   # The goal has yet to be processed by the action server
     # uint8 ACTIVE          = 1   # The goal is currently being processed by the action server
     # uint8 PREEMPTED       = 2   # The goal received a cancel request after it started executing
