@@ -86,7 +86,7 @@ class API:
             return "Go to {} {} {}".format(x, y, theta)
 
     def cancel(self):
-        if request.method == 'GET':
+        if request.method == 'POST':
             global move_base
             move_base.cancel_all_goals()
             return 'cancelling'

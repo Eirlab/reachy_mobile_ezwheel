@@ -2,7 +2,7 @@
     <!-- Arguments -->
     <arg name="map_file" default="$(find reachy_mobile_navigation)/maps/map.yaml"/>
     <arg name="open_rviz" default="true"/>
-    <arg name="open_api" default="flase"/>
+    <arg name="open_api" default="true"/>
     <arg name="move_forward_only" default="true"/>
 
     <param name="robot_description" textfile="$(find reachy_mobile_description)/urdf/swd_starter_kit.urdf"/>
